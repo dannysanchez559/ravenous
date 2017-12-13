@@ -7,15 +7,17 @@ import Business from '../Business/Business';
 
 // create BusinessList component
 class BusinessList extends React.Component {
+
     render() {
         return (
           <div class="BusinessList">
-            <Business /> 
-            <Business />
-            <Business />
-            <Business />
-            <Business />
-            <Business />
+            {
+        // accessing businesses array, from prop defined in app.js
+
+            this.props.businesses.map(business => {
+                return <Business business = {business} />
+            })
+            }
             </div>
         );
     }

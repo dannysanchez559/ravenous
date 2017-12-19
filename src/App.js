@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+
 import BusinessList from './components/BusinessList/BusinessList';
 import SearchBar from './components/SearchBar/SearchBar';
 
@@ -16,7 +17,7 @@ const business = {
   reviewCount: 90 
 };
 
- const businesses = [
+const businesses = [
     business,
     business,
     business,
@@ -26,12 +27,16 @@ const business = {
 ];
 
 class App extends React.Component {
+  searchYelp(term, location, sortBy) {
+        console.log(`searching yelp with ${term}, ${location}, ${sortBy}`);
+    }
+    
   render() {
  // instance of BusinessList component, with businesses array prop
     return (       
       <div className="App">
         <h1>ravenous</h1>
-        <SearchBar />
+        <SearchBar searchYelp={this.searchYelp}/>
         <BusinessList businesses = {businesses} /> 
       </div>
     );

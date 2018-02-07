@@ -19,7 +19,8 @@ class SearchBar extends React.Component {
     this.sortByOptions = {
       'Best Match': 'best_match',
       'Highest Rated': 'rating',
-      'Most Reviewed': 'review_count'
+      'Most Reviewed': 'review_count',
+      'Nearest Matches': 'distance'
     };
   }
 
@@ -49,31 +50,43 @@ class SearchBar extends React.Component {
   }
 
   renderSortByOptions() {
+
+
+
     return Object.keys(this.sortByOptions).map(sortByOption => {
+
       let sortByOptionValue = this.sortByOptions[sortByOption];
       return (
           <li 
-          className =      {this.getSortByClass(sortByOptionValue)}
+          className={this.getSortByClass(sortByOptionValue)}
           key={sortByOptionValue}
-          onClick={this.handleSortByChange.bind(this, sortByOptionValue)}>
+          onClick={function(event){this.handleSortByChange.bind(this, sortByOptionValue); this.handleSearch}}>
                 {sortByOption}
-             </li>
+          </li> 
+
       );
     });
-  }
+}
+
+
 
   render() {
     return (
       <div className="SearchBar">
         <div className="SearchBar-sort-options">
-          <ul>
-            {this.renderSortByOptions()}
-          </ul>
+      {/* automatically quiery api when choosing sort options */}
+           <a onClick = {this.handleSearch}>
+            <ul>
+              {this.renderSortByOptions()}
+            </ul>
+            </a>
+
         </div>
         <div className="SearchBar-fields">
           <input placeholder="Search Businesses" onChange={this.handleTermChange} />
           <input placeholder="Where?" onChange={this.handleLocationChange}/>
         </div>
+
         <div className="SearchBar-submit">
           <a onClick={this.handleSearch}>Let's Go</a>
         </div>

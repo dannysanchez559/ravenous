@@ -1,6 +1,8 @@
 import React from 'react';
 import './SearchBar.css';
 
+import FilterButton from '../FilterButton/FilterButton';
+
 class SearchBar extends React.Component {
   constructor(props) {
     super(props);
@@ -43,26 +45,33 @@ class SearchBar extends React.Component {
     this.setState({location: event.target.value});
   }
 
-  handleSearch(event) {
+  handleSearch() {
     this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
+  }
 
-    event.preventDefault();
+  handleSearchAndSort(sortByOptionValue) {
+    this.handleSearch();
+    this.handleSortByChange(sortByOptionValue);
   }
 
   renderSortByOptions() {
-
-
-
     return Object.keys(this.sortByOptions).map(sortByOption => {
-
       let sortByOptionValue = this.sortByOptions[sortByOption];
+      let filterClass = this.getSortByClass(sortByOptionValue);
+
       return (
-          <li 
+          <FilterButton labelValue={sortByOption}
+                        key={sortByOptionValue}
+                        handleSearchAndSort={this.handleSearchAndSort.bind(this, sortByOptionValue)}
+                        getSortByClass={filterClass}
+                        />
+     /*     <li 
           className={this.getSortByClass(sortByOptionValue)}
           key={sortByOptionValue}
           onClick={function(event){this.handleSortByChange.bind(this, sortByOptionValue); this.handleSearch}}>
                 {sortByOption}
           </li> 
+          */
 
       );
     });

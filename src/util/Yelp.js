@@ -11,6 +11,7 @@ const Yelp = {
       return response.json();
     }).then(jsonResponse => {
       if (jsonResponse.businesses) {
+        console.log(jsonResponse.businesses[0].name, jsonResponse.businesses[0].distance);
         return jsonResponse.businesses.map(business => ({
           id: business.id,
           imageSrc: business.image_url,
@@ -21,7 +22,9 @@ const Yelp = {
           zipCode: business.location.zip_code,
           category: business.categories[0].title,
           rating: business.rating,
-          reviewCount: business.review_count
+          reviewCount: business.review_count,
+          url: business.url,
+          distance: business.distance
         }));
       }
     });

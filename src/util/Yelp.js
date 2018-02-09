@@ -11,7 +11,6 @@ const Yelp = {
       return response.json();
     }).then(jsonResponse => {
       if (jsonResponse.businesses) {
-        console.log(jsonResponse.businesses[0].name, jsonResponse.businesses[0].distance);
         return jsonResponse.businesses.map(business => ({
           id: business.id,
           imageSrc: business.image_url,

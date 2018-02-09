@@ -17,9 +17,8 @@ class Business extends React.Component {
         <div className="Business-address">
             <a target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${this.props.business.name}`}>
             <p>{this.props.business.address}</p>
-            <p>{this.props.business.city}</p>
-            <p>{`${this.props.business.state} ${this.props.business.zipCode}`}</p>
-            <p>{this.props.business.distance}</p>
+            <p>{`${this.props.business.city}, ${this.props.business.state} ${this.props.business.zipCode}`}</p>
+            <p>{(Math.round((this.props.business.distance / 1609.344)*10) / 10)  } Miles</p>
           </a>
           </div>
           <div className="Business-reviews">

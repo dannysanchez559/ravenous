@@ -1,5 +1,6 @@
 import React from 'react';
 import './SearchBar.css';
+import FilterButton from '../FilterButton/FilterButton';
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -32,7 +33,17 @@ class SearchBar extends React.Component {
   }
 
   handleSortByChange(sortByOption) {
-    this.setState({sortBy: sortByOption});
+    // added a callback function, since setState is async, would not update immediately
+    this.setState({
+      sortBy: sortByOption
+    }, () => {
+      this.handleSearch();
+    });
+
+    //console.log('inside handleSortByChange: ', this.state.sortBy);
+  }
+  updatingItem() {
+    this.updateItem(this.state);
   }
 
   handleTermChange(event) {
@@ -44,28 +55,49 @@ class SearchBar extends React.Component {
   }
 
   handleSearch(event) {
-    this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
+    console.log('inside handleSearch: ', this.state.term, ',', this.state.location);
+    // define error handling for this.state.business
+    if(!this.state.location) {
+      alert('Please enter a valid location.');
+    }
+    else {
+      this.props.searchYelp(this.state.term, this.state.location, this.state.sortBy);
 
-    event.preventDefault();
+    }
+  }
+
+  handleSearchAndSort(sortByOptionValue) {
+   // console.log('inside handleSearchAndSort: ', sortByOptionValue);
+    this.handleSortByChange(sortByOptionValue);
+  }
+
+// when user presses enter in search field, run fetch api call
+  handleKeyPress(event) {
+    if(event.key === 'Enter') {
+      this.handleSearch();
+    }
   }
 
   renderSortByOptions() {
 
-
-
     return Object.keys(this.sortByOptions).map(sortByOption => {
 
       let sortByOptionValue = this.sortByOptions[sortByOption];
+      let filterClass = this.getSortByClass(sortByOptionValue);
+
       return (
-          <li 
-          className={this.getSortByClass(sortByOptionValue)}
+
+        <FilterButton 
+          labelValue={sortByOption}
           key={sortByOptionValue}
-          onClick={function(event){this.handleSortByChange.bind(this, sortByOptionValue); this.handleSearch}}>
-                {sortByOption}
-          </li> 
+          handleSearchAndSort={this.handleSearchAndSort.bind(this, sortByOptionValue)}
+          getSortByClass={filterClass}
+        />
+
 
       );
     });
+
 }
 
 
@@ -74,17 +106,17 @@ class SearchBar extends React.Component {
     return (
       <div className="SearchBar">
         <div className="SearchBar-sort-options">
-      {/* automatically quiery api when choosing sort options */}
-           <a onClick = {this.handleSearch}>
             <ul>
               {this.renderSortByOptions()}
             </ul>
-            </a>
-
         </div>
+
         <div className="SearchBar-fields">
-          <input placeholder="Search Businesses" onChange={this.handleTermChange} />
-          <input placeholder="Where?" onChange={this.handleLocationChange}/>
+          <input placeholder="Search Businesses" onChange={this.handleTermChange} 
+          onKeyPress={this.handleKeyPress.bind(this)}/>
+
+          <input placeholder="Where?" onChange={this.handleLocationChange} 
+          onKeyPress={this.handleKeyPress.bind(this)}/>
         </div>
 
         <div className="SearchBar-submit">
